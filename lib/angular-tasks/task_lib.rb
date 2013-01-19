@@ -1,38 +1,43 @@
 require 'rake/tasklib'
 
+require 'angular-tasks/configuration'
 
 class AngularTasks::TaskLib < ::Rake::TaskLib
 
   def initialize
+    @config = AngularTasks::Configuration.new
+    yield @config if block_given?
     define_tasks
   end
 
   private
 
+  def verbose?
+    @config.verbose
+  end
+
+  def boot_filename
+    @config.boot_filename
+  end
+
   def coffeescripts_dir
-    'app/js'
+    @config.coffeescripts_dir
   end
 
   def javascripts_dir
-    'src/js'
+    @config.javascripts_dir
   end
 
-
   def compile_coffeescript?
-    true
+    @config.compile_coffeescript
   end
 
   def compile_sass?
-    true
+    @config.compile_sass
   end
 
   def components
-    {
-      :directives  => "directives/**/*.coffee",
-      :filters  => "filters/**/*.coffee",
-      :services  => "services/**/*.coffee",
-      :controllers => "controllers/**/*.coffee"
-    }
+    @config.components
   end
 
   def default_tasks
@@ -64,18 +69,18 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
         components.each do |component, files|
           desc "Compile the #{component}"
           task component do
-            build_coffee_component "#{component}.js", "#{component}.coffee", "#{coffeescripts_dir}#{files}"
+            build_coffee_component "#{component}.js", "#{component}.coffee", File.join(coffeescripts_dir, files)
           end
         end
 
         task :app do
-          build_coffee_component 'app.js', "app.coffee"
+          build_coffee_component "#{boot_filename}.js", "#{boot_filename}.coffee"
         end
 
       end
 
       task :css do
-        sh 'compass compile ; true'
+        execute 'compass compile'
       end
 
     end
@@ -84,16 +89,29 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
 
   def build_coffee_component(target_file, file, additional_files = [])
 
-    files = [ "#{coffeescripts_dir}#{file}" ]
+    files = [ File.join(coffeescripts_dir, file) ]
 
-    additional_files = Dir.glob files unless additional_files.responds_to? :join
-    files += additional_files.join ' '
+    files += if additional_files.is_a? Array
+               log "Passed in array of files: #{additional_files}" if verbose?
+               additional_files
+             else
+               log "Looking for additional files: #{additional_files}" if verbose?
+               Dir.glob additional_files
+             end
 
-    filename = "#{javascripts_dir}#{target_file}"
+    filename = File.join javascripts_dir,target_file
+    cmd = "cat #{files.join ' '} | coffee --stdio --compile > #{filename} "
 
-    # TODO: Not sure if this will work on Windows
-    cat = "cat #{files.join ' '}"
-    sh " #{cat} | coffee --stdio --compile > #{filename} ;true"
+    execute cmd
+  end
+
+  def execute cmd
+    log "Executing: #{cmd}" if verbose?
+    %x[ #{cmd} ]
+  end
+
+  def log msg
+    puts msg
   end
 
 end
