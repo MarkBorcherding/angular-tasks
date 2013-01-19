@@ -1,6 +1,7 @@
 require 'rake/tasklib'
 
-class AngularTaskLib < ::Rake::TaskLib
+
+class AngularTasks::TaskLib < ::Rake::TaskLib
 
   def initialize
     define_tasks
