@@ -66,12 +66,12 @@ AngularTasks::TaskLib.new do |config|
   config.compile_coffeescript? = true  # If we should even compile the CoffeeScript.
   config.coffeescripts_dir = 'app/js'  # The directory of the CoffeeScript files to compile.
   config.javascripts_dir = 'app/js'    # The output directory for the JavaScript files.
-  config.boot_filename = 'app'         # The coffe file without any dependencies...will probably delete
-  config.components = {                # A list of the components and the directory to find their supporting files
+  config.files = {                     # A list of the JavaScript files and the directory to find their supporting files
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",
     :controllers => "controllers/**/*.coffee"
+    :app => "app/**/*.coffee"
   }
 end
 ```

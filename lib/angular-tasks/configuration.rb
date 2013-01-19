@@ -10,13 +10,12 @@ class AngularTasks::Configuration < Hashie::Dash
   property :compile_sass, :required => true, :default => true
   property :compile_coffeescript, :required => true, :default => true
 
-  property :boot_filename, :required => true, :default => 'app'
-
-  property :components, :required => true, :default => {
+  property :files, :required => true, :default => {
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",
-    :controllers => "controllers/**/*.coffee"
+    :controllers => "controllers/**/*.coffee",
+    :app => 'app/**/*.coffee'
   }
 
 

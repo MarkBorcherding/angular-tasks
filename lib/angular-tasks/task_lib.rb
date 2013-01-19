@@ -16,10 +16,6 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
     @config.verbose
   end
 
-  def boot_filename
-    @config.boot_filename
-  end
-
   def coffeescripts_dir
     @config.coffeescripts_dir
   end
@@ -36,8 +32,8 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
     @config.compile_sass
   end
 
-  def components
-    @config.components
+  def files
+    @config.files
   end
 
   def default_tasks
@@ -47,13 +43,25 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
   end
 
   def javascript_tasks
-    tasks = components.keys.map do |component|
-      "build:js:#{component}"
+    files.keys.map do |file|
+      "build:js:#{file}"
     end
-    tasks << "build:js:app"
   end
 
   def define_tasks
+
+    desc 'Clean all generated JavaScript files'
+    task :clean do
+      files.each do |filename, source_files|
+        file = Pathname.new(javascripts_dir).join "#{filename}.js"
+        if file.exist?
+          log "Deleting #{file}" if verbose?
+          file.delete
+        else
+          log "File #{file} does not exist to delete." if verbose?
+        end
+      end
+    end
 
 
     desc 'Build the static assets'
@@ -66,15 +74,11 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
 
       namespace :js do
 
-        components.each do |component, files|
-          desc "Compile the #{component}"
-          task component do
-            build_coffee_component "#{component}.js", "#{component}.coffee", File.join(coffeescripts_dir, files)
+        files.each do |file, files|
+          desc "Compile #{file}.js"
+          task file do
+            compile_coffescript_file "#{file}.js", "#{file}.coffee", File.join(coffeescripts_dir, files)
           end
-        end
-
-        task :app do
-          build_coffee_component "#{boot_filename}.js", "#{boot_filename}.coffee"
         end
 
       end
@@ -87,7 +91,7 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
 
   end
 
-  def build_coffee_component(target_file, file, additional_files = [])
+  def compile_coffescript_file(target_file, file, additional_files = [])
 
     files = [ File.join(coffeescripts_dir, file) ]
 
