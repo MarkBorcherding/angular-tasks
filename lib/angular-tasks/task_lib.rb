@@ -83,8 +83,32 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
 
       end
 
+      'Compile the SCSS using compass'
       task :css do
         execute 'compass compile'
+      end
+
+      namespace :css do
+        'Generate the Compass config.rb'
+        task :init do
+
+          config_file_contents = <<CONFIG_FILE
+http_path = "/"
+project_path = 'app'
+css_dir = "css"
+javascripts_dir = "js"
+images_dir = "images"
+sass_dir = "../app/css"
+CONFIG_FILE
+
+          config_file = Pathname.new 'config.rb'
+          if config_file.exist?
+            log 'Config file already exists.'
+          else
+            log "Writing config file" if verbose?
+            File.open(config_file, 'w') {|f| f.write(config_file_contents) }
+          end
+        end
       end
 
     end
@@ -104,14 +128,14 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
              end
 
     filename = File.join javascripts_dir,target_file
-    cmd = "cat #{files.join ' '} | coffee --stdio --compile > #{filename} "
+    cmd = "echo 'Compiling #{filename}...';cat #{files.join ' '} | coffee --stdio --compile > #{filename} "
 
     execute cmd
   end
 
   def execute cmd
     log "Executing: #{cmd}" if verbose?
-    %x[ #{cmd} ]
+    puts %x[ #{cmd} ]
   end
 
   def log msg

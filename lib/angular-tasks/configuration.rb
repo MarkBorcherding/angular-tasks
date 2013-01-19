@@ -2,14 +2,11 @@ require 'hashie'
 
 class AngularTasks::Configuration < Hashie::Dash
 
-  property :verbose, :required => true, :default => true
+  property :verbose, :required => true, :default => false
 
+  property :compile_coffeescript, :required => true, :default => true
   property :javascripts_dir, :required => true, :default => 'app/js'
   property :coffeescripts_dir, :required => true, :default => 'app/js'
-
-  property :compile_sass, :required => true, :default => true
-  property :compile_coffeescript, :required => true, :default => true
-
   property :files, :required => true, :default => {
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
@@ -18,5 +15,6 @@ class AngularTasks::Configuration < Hashie::Dash
     :app => 'app/**/*.coffee'
   }
 
+  property :compile_sass, :required => true, :default => true
 
 end
