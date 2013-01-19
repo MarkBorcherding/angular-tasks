@@ -4,8 +4,8 @@ class AngularTasks::Configuration < Hashie::Dash
 
   property :verbose, :required => true, :default => true
 
-  property :javascripts_dir, :required => true, :default => 'src/js'
-  property :coffeescripts_dir, :required => true, :default => 'src/js'
+  property :javascripts_dir, :required => true, :default => 'app/js'
+  property :coffeescripts_dir, :required => true, :default => 'app/js'
 
   property :compile_sass, :required => true, :default => true
   property :compile_coffeescript, :required => true, :default => true
