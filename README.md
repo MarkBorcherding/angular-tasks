@@ -7,6 +7,10 @@ A set of `rake` tasks to compile a CoffeeScript and SASS in an Angular project t
 I find myself follwoing the layout pattern found in the Angular-Seed example, but I don't like having to put all the controllers in one
 file. There should be some help there with building several controller files into one.
 
+## Requirements
+
+Depending on what parts you use, you will need a CoffeeScript compiler and Compass to compile the Scss.
+
 ## Installation
 
 Add this line to your application's Gemfile:
