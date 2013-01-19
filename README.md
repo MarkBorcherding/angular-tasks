@@ -120,8 +120,7 @@ Typically, I've been configuring each module like the following:
 controllers = angular.module('myapp.controllers', ['myapp.services' ])
 
 # Create a helper function to avoid controllers.controller 'SomeController'
-controller = (name, func) ->
-  controllers.controller name, func
+controller = controllers.controller
 ```
 
 The files in the `controllers/` each look like the following:
@@ -139,9 +138,7 @@ The get concatenated before they get compiled so they all exist inside the same 
 
   controllers = angular.module('myapp.controllers', ['myapp.services']);
 
-  controller = function(name, func) {
-    return controllers.controller(name, func);
-  };
+  controller = controllers.controller;
 
   controller('HomeController', function($scope) {
     return $scope.foo = 'bar';
