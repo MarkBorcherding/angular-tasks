@@ -16,7 +16,7 @@ Depending on what parts you use, you will need a CoffeeScript compiler and Compa
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'angular-tasks', :git => 'git://github.com/markborcherding/angular-tasks.git
+gem 'angular-tasks', :git => 'git://github.com/markborcherding/angular-tasks.git'
 ```
 
 And then execute:
