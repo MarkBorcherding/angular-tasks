@@ -67,6 +67,7 @@ AngularTasks::TaskLib.new do |config|
   config.coffeescripts_dir = 'app/js'  # The directory of the CoffeeScript files to compile.
   config.javascripts_dir = 'app/js'    # The output directory for the JavaScript files.
   config.files = {                     # A list of the JavaScript files and the directory to find their supporting files
+    :config  => "config/#{config.environment}/**/*.coffee",
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",

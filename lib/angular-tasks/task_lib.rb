@@ -32,8 +32,11 @@ class AngularTasks::TaskLib < ::Rake::TaskLib
     @config.compile_sass
   end
 
+
   def files
-    @config.files
+   @config.files.select do |a,b|
+      File.exist? Pathname.new(coffeescripts_dir).join "#{a}.coffee"
+    end
   end
 
   def default_tasks
