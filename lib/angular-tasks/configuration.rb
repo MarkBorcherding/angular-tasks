@@ -2,6 +2,7 @@ require 'hashie'
 
 class AngularTasks::Configuration < Hashie::Dash
 
+
   property :environment, required: true, default: ENV['ANGULAR_ENV'] || 'development'
   property :verbose, :required => true, :default => false
 
@@ -9,6 +10,7 @@ class AngularTasks::Configuration < Hashie::Dash
   property :javascripts_dir, :required => true, :default => 'app/js'
   property :coffeescripts_dir, :required => true, :default => 'app/js'
   property :files, :required => true, :default => {
+    :config  => "config/#{@environment}/**/*.coffee",
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",
