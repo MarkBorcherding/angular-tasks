@@ -2,6 +2,7 @@ require 'hashie'
 
 class AngularTasks::Configuration < Hashie::Dash
 
+  property :environment, required: true, default: ENV['ANGULAR_ENV'] || 'development'
   property :verbose, :required => true, :default => false
 
   property :compile_coffeescript, :required => true, :default => true
