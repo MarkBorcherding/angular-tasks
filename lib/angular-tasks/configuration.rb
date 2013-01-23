@@ -3,14 +3,20 @@ require 'hashie'
 class AngularTasks::Configuration < Hashie::Dash
 
 
-  property :environment, required: true, default: ENV['ANGULAR_ENV'] || 'development'
-  property :verbose, :required => true, :default => false
+  # I don't think we can both set the environment and default the config
+  # location. When that is changed in the config block, the default config
+  # location is wrong. Just don't set it in rake. That doesn't make sense
+  # anyway.
+  def self.default_environment
+    ENV['ANGULAR_ENV'] || 'development'
+  end
 
+  property :verbose, :required => true, :default => false
   property :compile_coffeescript, :required => true, :default => true
   property :javascripts_dir, :required => true, :default => 'app/js'
   property :coffeescripts_dir, :required => true, :default => 'app/js'
   property :files, :required => true, :default => {
-    :config  => "config/#{@environment}/**/*.coffee",
+    :config  => "config/#{default_environment}/**/*.coffee",
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",

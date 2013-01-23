@@ -43,6 +43,7 @@ AngularTasks::TaskLib.new do |config|
 end
 ```
 
+
 ## Usage
 
 Check out the tasks with `rake -T`.
@@ -67,7 +68,7 @@ AngularTasks::TaskLib.new do |config|
   config.coffeescripts_dir = 'app/js'  # The directory of the CoffeeScript files to compile.
   config.javascripts_dir = 'app/js'    # The output directory for the JavaScript files.
   config.files = {                     # A list of the JavaScript files and the directory to find their supporting files
-    :config  => "config/#{config.environment}/**/*.coffee",
+    :config  => "config/#{environment}/**/*.coffee",
     :directives  => "directives/**/*.coffee",
     :filters  => "filters/**/*.coffee",
     :services  => "services/**/*.coffee",
@@ -76,6 +77,46 @@ AngularTasks::TaskLib.new do |config|
   }
 end
 ```
+
+### Environment Specific Configuration
+
+You can configure environment specific javascript by including the environment name in the path to the
+config files.
+
+```ruby
+environment = ENV['MY_APP_ENV'] || 'development'
+
+AngularTasks::TaskLib.new do |config|
+  # Other settings
+  config.files = {                     # A list of the JavaScript files and the directory to find their supporting files
+    :config  => "config/#{environment}/**/*.coffee"
+    # other top level files
+  }
+end
+```
+
+Then either set that environment variable or pass it in on the command line.
+
+    rake build:js MY_APP_ENV=staging
+
+The config file can be a value service and the files in the config folder can append to the top level object. For
+example, the `config.coffee` might look like this:
+
+```coffeescript
+config = {}
+angular.module('my_app.config', []).value 'config', config
+```
+
+Then a file in the `app/js/config/development/my-app.coffee` might look like the following:
+
+```coffeescript
+config.myApp =
+  serviceUrl: 'http://dev.someApp.com/
+  loggingLevel: 'debug'
+```
+
+#### Default Setup
+By default it will set the environment to `ENV['ANGULAR_ENV']` or `development` if that value does not exist.
 
 
 ### File Concatenation
